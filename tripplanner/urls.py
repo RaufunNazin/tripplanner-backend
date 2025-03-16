@@ -4,15 +4,20 @@ from rest_framework.routers import DefaultRouter
 from tripapi.views import DriverViewSet, TripPlanViewSet, plan_trip
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import HttpResponse
 
 router = DefaultRouter()
 router.register(r'drivers', DriverViewSet)
 router.register(r'tripplans', TripPlanViewSet)
 
+def home(request):
+    return HttpResponse("<h1>Welcome to the Django Backend</h1>")
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/plan-trip/', plan_trip, name='plan-trip'),
+    path('', home),
     # path('api/eld-log-image/<int:log_id>/', generate_eld_log_image, name='eld-log-image'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
