@@ -3,10 +3,13 @@ import json
 from datetime import datetime, timedelta
 import math
 import os
+import io
+import base64
 import matplotlib.pyplot as plt
 import cv2
 import matplotlib
 from django.conf import settings
+from django.http import JsonResponse
 
 matplotlib.use('Agg')
 
@@ -573,16 +576,19 @@ class TripPlannerService:
         
         # Generate filename & save the image in MEDIA_ROOT
         image_filename = f"eld_log_{datetime.now().strftime('%Y%m%d%H%M%S')}{i}.png"
-        output_path = os.path.join(settings.MEDIA_ROOT, image_filename)
-
-        # Ensure matplotlib doesn't show GUI
-        plt.axis('off')
-        plt.savefig(output_path, bbox_inches='tight', dpi=300)
+        # Save to in-memory buffer
+        buffer = io.BytesIO()
+        plt.axis("off")
+        plt.savefig(buffer, format="png", bbox_inches="tight", dpi=300)
         plt.close(fig)
+        
+        buffer.seek(0)
+        
+        # Convert to base64
+        image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-        print(f"✅ ELD log saved at: {output_path}")
-
-        return f"{settings.MEDIA_URL}{image_filename}"
+        # Return JSON response instead of HttpResponse
+        return image_base64
         
     def generate_and_draw_eld_logs(self, eld_logs):
         """
