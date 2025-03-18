@@ -5,6 +5,8 @@ SECRET_KEY = 'django-insecure-abcdefghijklmnopqrstuvwxyz1234567890'
 
 DEBUG = True
 
+os.environ.setdefault("GUNICORN_CMD_ARGS", "--timeout 300 --workers 2")
+
 ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', 'localhost', 'web-production-59cbe.up.railway.app']
 

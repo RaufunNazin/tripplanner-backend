@@ -1,1 +1,1 @@
-web: python manage.py migrate && gunicorn tripplanner.wsgi --timeout 300 --workers 3 --log-file -
+web: python manage.py migrate && gunicorn tripplanner.wsgi --timeout 300 --workers 2 --log-file -

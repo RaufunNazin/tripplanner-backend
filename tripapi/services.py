@@ -37,7 +37,8 @@ class TripPlannerService:
                 'api_key': self.ORS_API_KEY,
                 'text': location,
                 'size': 1
-            }
+            },
+            timeout=300
         )
         
         if response.status_code != 200:
@@ -79,7 +80,7 @@ class TripPlannerService:
             "Content-Type": "application/json"
         }
 
-        response = requests.post(self.ORS_ENDPOINT, json=payload, headers=headers)
+        response = requests.post(self.ORS_ENDPOINT, json=payload, headers=headers, timeout=300)
         
         if response.status_code != 200:
             raise Exception(f"Failed to calculate route: {response.text}")
